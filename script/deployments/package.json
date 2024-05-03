@@ -1,6 +1,6 @@
 {
     "name": "deploy-circles",
-    "version": "0.3.2-alpha",
+    "version": "0.3.3-alpha",
     "type": "module",
     "dependencies": {
         "dotenv": "^16.4.5",

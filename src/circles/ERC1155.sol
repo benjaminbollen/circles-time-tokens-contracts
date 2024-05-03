@@ -341,12 +341,12 @@ abstract contract ERC1155 is DiscountedBalances, Context, ERC165, IERC1155, IERC
      * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
      * acceptance magic value.
      */
-    function _mintBatch(address to, uint256[] memory ids, uint256[] memory values, bytes memory data) internal {
-        if (to == address(0)) {
-            revert ERC1155InvalidReceiver(address(0));
-        }
-        _updateWithAcceptanceCheck(address(0), to, ids, values, data);
-    }
+    // function _mintBatch(address to, uint256[] memory ids, uint256[] memory values, bytes memory data) internal {
+    //     if (to == address(0)) {
+    //         revert ERC1155InvalidReceiver(address(0));
+    //     }
+    //     _updateWithAcceptanceCheck(address(0), to, ids, values, data);
+    // }
 
     /**
      * @dev Destroys a `value` amount of tokens of type `id` from `from`
@@ -376,13 +376,14 @@ abstract contract ERC1155 is DiscountedBalances, Context, ERC165, IERC1155, IERC
      * - `from` cannot be the zero address.
      * - `from` must have at least `value` amount of tokens of type `id`.
      * - `ids` and `values` must have the same length.
+     * //
      */
-    function _burnBatch(address from, uint256[] memory ids, uint256[] memory values) internal {
-        if (from == address(0)) {
-            revert ERC1155InvalidSender(address(0));
-        }
-        _updateWithAcceptanceCheck(from, address(0), ids, values, "");
-    }
+    // function _burnBatch(address from, uint256[] memory ids, uint256[] memory values) internal {
+    //     if (from == address(0)) {
+    //         revert ERC1155InvalidSender(address(0));
+    //     }
+    //     _updateWithAcceptanceCheck(from, address(0), ids, values, "");
+    // }
 
     /**
      * @dev Approve `operator` to operate on all of `owner` tokens

@@ -97,7 +97,7 @@ contract ERC20DiscountedBalances is ERC20Permit, Demurrage, IERC20 {
         ) + _value;
         if (newBalance > MAX_VALUE) {
             // Balance exceeds maximum value.
-            revert CirclesERC1155AmountExceedsMaxUint190(_account, 0, newBalance, 0);
+            revert CirclesERC1155AmountExceedsMaxUint190(_account, 0, newBalance, 1);
         }
         discountedBalance.balance = uint192(newBalance);
         discountedBalance.lastUpdatedDay = _day;

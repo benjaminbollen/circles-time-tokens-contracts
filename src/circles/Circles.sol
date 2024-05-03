@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity >=0.8.13;
 
+import "../errors/Errors.sol";
 import "../lib/Math64x64.sol";
 import "./ERC1155.sol";
 
-contract Circles is ERC1155 {
+contract Circles is ERC1155, ICirclesErrors {
     // Type declarations
 
     /**
@@ -56,7 +57,7 @@ contract Circles is ERC1155 {
      * and the status of the v1 Circles minting.
      * @dev This is used to store the last mint time for each avatar.
      */
-    mapping(address => MintTime) public mintTimes;
+    mapping(address => MintTime) internal mintTimes;
 
     // Events
 
@@ -142,11 +143,48 @@ contract Circles is ERC1155 {
             return;
         }
         // mint personal Circles to the human
-        _mint(_human, toTokenId(_human), issuance, "");
+        _mintAndUpdateTotalSupply(_human, toTokenId(_human), issuance, "");
         // update the last mint time
         mintTimes[_human].lastMintTime = uint96(block.timestamp);
 
         emit PersonalMint(_human, issuance, startPeriod, endPeriod);
+    }
+
+    function _mintAndUpdateTotalSupply(address _account, uint256 _id, uint256 _value, bytes memory _data) internal {
+        _mint(_account, _id, _value, _data);
+
+        uint64 today = day(block.timestamp);
+        DiscountedBalance storage totalSupplyBalance = discountedTotalSupplies[_id];
+        uint256 newTotalSupply =
+            _calculateDiscountedBalance(totalSupplyBalance.balance, today - totalSupplyBalance.lastUpdatedDay) + _value;
+        if (newTotalSupply > MAX_VALUE) {
+            // DiscountedBalances: balance exceeds maximum value
+            revert CirclesERC1155AmountExceedsMaxUint190(_account, _id, newTotalSupply, 2);
+        }
+        totalSupplyBalance.balance = uint192(newTotalSupply);
+        totalSupplyBalance.lastUpdatedDay = today;
+    }
+
+    function _burnAndUpdateTotalSupply(address _account, uint256 _id, uint256 _value) internal {
+        // _update will discount the balance before subtracting the value
+        _burn(_account, _id, _value);
+
+        uint64 today = day(block.timestamp);
+        DiscountedBalance storage totalSupplyBalance = discountedTotalSupplies[_id];
+        uint256 discountedTotalSupply =
+            _calculateDiscountedBalance(totalSupplyBalance.balance, today - totalSupplyBalance.lastUpdatedDay);
+        if (discountedTotalSupply < _value) {
+            // Logically impossible to burn more than the total supply
+            // however if the total supply nears dust, the discounting of the balance
+            // and the total supply might differ on the least significant bits.
+            // There is no good way to handle this, so user should burn a few attoCRC less,
+            // or wait a day for the total supply to be discounted to zero automatically.
+            revert CirclesLogicAssertion(4);
+        }
+        unchecked{
+            totalSupplyBalance.balance = uint192(discountedTotalSupply - _value);
+        }
+        totalSupplyBalance.lastUpdatedDay = today;
     }
 
     // Private functions

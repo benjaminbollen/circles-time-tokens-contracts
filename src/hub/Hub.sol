@@ -21,7 +21,7 @@ import "./MetadataDefinitions.sol";
  * It further allows to wrap any token into an inflationary or demurraged
  * ERC20 Circles contract.
  */
-contract Hub is Circles, MetadataDefinitions, IHubErrors, ICirclesErrors {
+contract Hub is Circles, MetadataDefinitions, IHubErrors {
     // Type declarations
 
     /**
@@ -64,6 +64,18 @@ contract Hub is Circles, MetadataDefinitions, IHubErrors, ICirclesErrors {
     address private constant SENTINEL = address(0x1);
 
     // State variables
+
+    /**
+     * @notice The global name of Circles.
+     * todo, change this to "Circles" for the production deployment
+     */
+    string public name = "Rings";
+
+    /**
+     * @notice The global symbol ticker for Circles.
+     * todo, change this to "CRC" for the production deployment
+     */
+    string public symbol = "RING";
 
     /**
      * @notice The Hub v1 contract address.
@@ -248,11 +260,11 @@ contract Hub is Circles, MetadataDefinitions, IHubErrors, ICirclesErrors {
 
         if (block.timestamp > invitationOnlyTime) {
             // after the bootstrap period, the inviter must burn the invitation cost
-            _burn(msg.sender, toTokenId(msg.sender), INVITATION_COST);
+            _burnAndUpdateTotalSupply(msg.sender, toTokenId(msg.sender), INVITATION_COST);
 
             // todo: re-discuss desired approach to welcome bonus vs migration
             // invited receives the welcome bonus in their personal Circles
-            _mint(_human, toTokenId(_human), WELCOME_BONUS, "");
+            _mintAndUpdateTotalSupply(_human, toTokenId(_human), WELCOME_BONUS, "");
         }
 
         // set trust to indefinite future, but avatar can edit this later
@@ -468,12 +480,12 @@ contract Hub is Circles, MetadataDefinitions, IHubErrors, ICirclesErrors {
                 // Only humans can migrate v1 tokens after the bootstrap period.
                 revert CirclesHubMustBeHuman(_owner, 4);
             }
-            _burn(_owner, toTokenId(_owner), cost);
+            _burnAndUpdateTotalSupply(_owner, toTokenId(_owner), cost);
         }
 
         for (uint256 i = 0; i < _avatars.length; i++) {
             // mint the migrated balances to _owner
-            _mint(_owner, toTokenId(_avatars[i]), _amounts[i], "");
+            _mintAndUpdateTotalSupply(_owner, toTokenId(_avatars[i]), _amounts[i], "");
         }
     }
 
@@ -498,7 +510,7 @@ contract Hub is Circles, MetadataDefinitions, IHubErrors, ICirclesErrors {
                 revert CirclesHubGroupMintPolicyRejectedBurn(msg.sender, group, _amount, _data, 0);
             }
         }
-        _burn(msg.sender, _id, _amount);
+        _burnAndUpdateTotalSupply(msg.sender, _id, _amount);
     }
 
     // Public functions
@@ -665,7 +677,7 @@ contract Hub is Circles, MetadataDefinitions, IHubErrors, ICirclesErrors {
         safeBatchTransferFrom(_sender, treasuries[_group], _collateral, _amounts, dataWithGroup);
 
         // mint group Circles to the sender and send the original _data onwards
-        _mint(_sender, toTokenId(_group), sumAmounts, _data);
+        _mintAndUpdateTotalSupply(_sender, toTokenId(_group), sumAmounts, _data);
     }
 
     function _verifyFlowMatrix(

@@ -10,7 +10,6 @@ import "./setup.sol";
 contract MintGroupCirclesTest is Test, GroupSetup, IHubErrors {
     // State variables
     address group;
-    address group2;
 
     // Constructor
 
