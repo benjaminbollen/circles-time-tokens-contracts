@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Path-based Transactions - Circles Protocol</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Path-based Transactions";
+        var mkdocs_page_input_path = "advanced-topics/path-based-transactions.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Circles Protocol
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../introduction/">Introduction</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../architecture/">Architectural Overview</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../inflation-demurrage/">Inflation and Demurrage</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Path-based Transactions</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#concept-overview">Concept Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#flow-matrices">Flow Matrices</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#structure-of-a-flow-matrix">Structure of a Flow Matrix</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#an-example-of-a-flow-matrix">An example of a flow matrix</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#flow-edges-explanation">Flow edges Explanation</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#stream-explanation">Stream Explanation</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#net-flow-and-consistency-check">Net Flow and Consistency Check</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#technical-implementation">Technical Implementation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#function-signature">Function Signature</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#key-steps-in-processing">Key Steps in Processing</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#minting-group-circles-along-a-path">Minting Group Circles along a Path</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-group-minting-works-in-path-transactions">How Group Minting Works in Path Transactions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#implementation-details">Implementation Details</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#key-aspects-of-group-minting-in-paths">Key Aspects of Group Minting in Paths</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#implications-and-benefits">Implications and Benefits</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#trust-and-consented-flow">Trust and Consented Flow</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#trust-implies-a-flow-edge">Trust Implies a Flow Edge</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#consented-flow">Consented Flow</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#key-aspects-of-consented-flow">Key Aspects of Consented Flow</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#behaviour-details">Behaviour Details</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#implications-of-consented-flow">Implications of Consented Flow</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Circles Protocol</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Advanced Topics</li>
+      <li class="breadcrumb-item active">Path-based Transactions</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="path-based-transactions-and-flow-matrices">Path-based Transactions and Flow Matrices</h1>
+<p>In the Circles ecosystem, path-based transactions enable the transfer of Circles tokens between people who don't directly trust each other. This system uses flow matrices to represent and validate these multi-hop transactions.</p>
+<h2 id="concept-overview">Concept Overview</h2>
+<p>Path-based transactions allow Circles to be transferred along a path of trust relationships. Instead of requiring direct trust between the sender and receiver, the system finds a path through the trust network where each step involves a trusted relationship.</p>
+<h2 id="flow-matrices">Flow Matrices</h2>
+<p>Flow matrices are structured representations for these path-based transactions. They describe the movement of Circles tokens through the network for a given transaction (or a batch of transactions).</p>
+<h3 id="structure-of-a-flow-matrix">Structure of a Flow Matrix</h3>
+<p>A flow matrix consists of the following components:</p>
+<ol>
+<li><strong>Flow Vertices</strong>: An ordered list of avatar addresses that the transaction path touches. This includes any avatar that sends, receives or whose Circles are used in any of the flow edges. These can be humans, organizations or groups, but must be registered.</li>
+<li><strong>Flow Edges</strong>: A path consists of a set of flow edges. This is expressed as an array of <code>FlowEdges</code>, each representing a transfer of a specific (personal or group) Circles type and amount between two vertices. These flow edges are applied in the order given and the order of the coordinates must match that of the flow edges. A <code>FlowEdge</code> therefore is a structure that specifies:<ul>
+<li><code>amount</code>: The amount of tokens being transferred (uint192) in this edge.</li>
+<li><code>streamSinkId</code>: To perform the <code>ERC1155:onERC1155Received()</code> call, the path needs to identify which edges are terminal flow edges. Therefore this references for all terminal edges a stream identifier (and is 0 for non-terminal edges; &gt;0 for terminal edges).</li>
+</ul>
+</li>
+<li><strong>Coordinates</strong>: Packed data representing triplets of indices within the flow vertices array: for each flow edge the coordinates must provide a triplet <code>(uint16, uint16, uint16)</code>, referencing the addresses of <code>(Circles-to-send, sender, receiver)</code> read from the flow vertices array. The coordinates are input as <code>bytes</code> packed explicitly per 16 bits to avoid zero-padding for 256bit word length.</li>
+<li><strong>Streams</strong>: A stream represents the actual intent of a sender to send an amount of Circles to a receiver - without specifying which Circles to send or over which path, simply that the receiver only ever receives Circles they trust. A stream specifies a <code>sourceCoordinate</code> as the index of the source (or sender) in the flow vertices array, an array of the <code>flowEdgeIds</code> to cross-reference with the flow edges the correct terminal edges of this stream; and <code>bytes data</code> that will be sent to the receiver of the stream in the acceptance call. A flow matrix can have:<ul>
+<li>zero streams provided: All edges combined must form a closed path where no sender and no receiver nett-receives or nett-sends an amount of Circles. This can be used to reorganise the balances of Circles across the graph.</li>
+<li>one stream provided: The flow matrix represents the path of a single intended transfer between a sender and receiver.</li>
+<li>two or more streams: The flow matrix represents a batch of intents of multiple senders to send Circles to receivers, and they get settled on-chain as single path (while still performing the acceptance checks for each stream's receiver).</li>
+</ul>
+</li>
+</ol>
+<h3 id="an-example-of-a-flow-matrix">An example of a flow matrix</h3>
+<p>Let's illustrate a flow matrix and streams with an example. Let's assume we have the following avatars (only humans).</p>
+<pre><code>Avatars (Flow Vertices):
+A: Alice
+B: Bob
+C: Charlie
+D: David
+E: Eva
+</code></pre>
+<p>Let's assume Alice wants to send 3 CRC to David, and 5 CRC to Eva. Bob wants to send 4 CRC to David as well. Let's assume they have the following trust graph among them (where the arrow means "trusts"):</p>
+<p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgMzAwIj4KICA8c3R5bGU+CiAgICAubm9kZSB7IGZpbGw6ICNmZjk3ODY7IHN0cm9rZTogIzM4MzE4Yjsgc3Ryb2tlLXdpZHRoOiAyOyB9CiAgICAubGFiZWwgeyBmaWxsOiAjMzgzMThiOyBmb250LWZhbWlseTogQXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTRweDsgfQogICAgLmFycm93IHsgZmlsbDogbm9uZTsgc3Ryb2tlOiAjMzgzMThiOyBzdHJva2Utd2lkdGg6IDI7IH0KICAgIC5hcnJvd2hlYWQgeyBmaWxsOiAjMzgzMThiOyB9CiAgPC9zdHlsZT4KICAKICA8IS0tIE5vZGVzIC0tPgogIDxjaXJjbGUgY2xhc3M9Im5vZGUiIGN4PSIxMDAiIGN5PSIxNTAiIHI9IjMwIiAvPgogIDxjaXJjbGUgY2xhc3M9Im5vZGUiIGN4PSIyMDAiIGN5PSIxNTAiIHI9IjMwIiAvPgogIDxjaXJjbGUgY2xhc3M9Im5vZGUiIGN4PSIzMDAiIGN5PSIxNTAiIHI9IjMwIiAvPgogIDxjaXJjbGUgY2xhc3M9Im5vZGUiIGN4PSI0MDAiIGN5PSIxMDAiIHI9IjMwIiAvPgogIDxjaXJjbGUgY2xhc3M9Im5vZGUiIGN4PSI0MDAiIGN5PSIyMDAiIHI9IjMwIiAvPgogIAogIDwhLS0gTGFiZWxzIC0tPgogIDx0ZXh0IGNsYXNzPSJsYWJlbCIgeD0iMTAwIiB5PSIxNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkE8L3RleHQ+CiAgPHRleHQgY2xhc3M9ImxhYmVsIiB4PSIyMDAiIHk9IjE1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ibGFiZWwiIHg9IjMwMCIgeT0iMTU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DPC90ZXh0PgogIDx0ZXh0IGNsYXNzPSJsYWJlbCIgeD0iNDAwIiB5PSIxMDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkQ8L3RleHQ+CiAgPHRleHQgY2xhc3M9ImxhYmVsIiB4PSI0MDAiIHk9IjIwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RTwvdGV4dD4KICAKICA8IS0tIEFycm93cyAtLT4KICA8cGF0aCBjbGFzcz0iYXJyb3ciIGQ9Ik0xNzAgMTUwIEwxMzAgMTUwIiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93aGVhZCkiIC8+CiAgPHBhdGggY2xhc3M9ImFycm93IiBkPSJNMjMwIDE1MCBMMjcwIDE1MCIgbWFya2VyLWVuZD0idXJsKCNhcnJvd2hlYWQpIiAvPgogIDxwYXRoIGNsYXNzPSJhcnJvdyIgZD0iTTI3MCAxNTAgTDIzMCAxNTAiIG1hcmtlci1lbmQ9InVybCgjYXJyb3doZWFkKSIgLz4KICA8cGF0aCBjbGFzcz0iYXJyb3ciIGQ9Ik0zMzAgMTUwIEwzNzAgMTEwIiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93aGVhZCkiIC8+CiAgPHBhdGggY2xhc3M9ImFycm93IiBkPSJNMzcwIDExMCBMMzMwIDE1MCIgbWFya2VyLWVuZD0idXJsKCNhcnJvd2hlYWQpIiAvPgogIDxwYXRoIGNsYXNzPSJhcnJvdyIgZD0iTTQwMCAxNzAgTDQwMCAxMzAiIG1hcmtlci1lbmQ9InVybCgjYXJyb3doZWFkKSIgLz4KICAKICA8IS0tIEFycm93aGVhZCBkZWZpbml0aW9uIC0tPgogIDxkZWZzPgogICAgPG1hcmtlciBpZD0iYXJyb3doZWFkIiBtYXJrZXJXaWR0aD0iMTAiIG1hcmtlckhlaWdodD0iNyIgcmVmWD0iOSIgcmVmWT0iMy41IiBvcmllbnQ9ImF1dG8iPgogICAgICA8cG9seWdvbiBjbGFzcz0iYXJyb3doZWFkIiBwb2ludHM9IjAgMCwgMTAgMy41LCAwIDciIC8+CiAgICA8L21hcmtlcj4KICA8L2RlZnM+Cjwvc3ZnPg==" alt="Circles Trust Graph" style="max-width: 500px; width: 100%; height: auto;"></p>
+<p>We can assume that everyone already holds some balances of the tokens of the people they trust. A possible path could look like the following:</p>
+<pre><code class="language-sh">+----------+-----+-----+-----+-----+-----+
+|          |  A  |  B  |  C  |  D  |  E  |
++----------+-----+-----+-----+-----+-----+
+| A-B      | -8A |  8A |     |     |     |
++----------+-----+-----+-----+-----+-----+
+| B-D (T2) |     | -4C |     |  4C |     |
++----------+-----+-----+-----+-----+-----+
+| B-C      |     | -5B |  5B |     |     |
++----------+-----+-----+-----+-----+-----+
+| B-D (T1) |     | -3C |     |  3C |     |
++----------+-----+-----+-----+-----+-----+
+| C-E (T3) |     |     | -5D |     |  5D |
++==========+=====+=====+=====+=====+=====+
+| Net Flow | -8  | -4  |   0 |  7  |  5  |
++==========+=====+=====+=====+=====+=====+
+| Stream 1 | -3  |     |     |  3  |     |
++----------+-----+-----+-----+-----+-----+
+| Stream 2 |     | -4  |     |  4  |     |
++----------+-----+-----+-----+-----+-----+
+| Stream 3 | -5  |     |     |     |  5  |
++----------+-----+-----+-----+-----+-----+
+</code></pre>
+<p>In this diagram, positive values represent incoming tokens and negative values represent outgoing tokens; the letters <code>(A, B, C, D)</code> represent the type of Circles tokens being transfered; and streams don't specify token types, only amounts.</p>
+<h4 id="flow-edges-explanation">Flow edges Explanation</h4>
+<p>Note: flow edge arrays and flow vertices arrays are indexed from 0. Streams are explicitly indexed from 1, because we reserve 0 for not-referencing a stream. (And Markdown will not enumerate from 0, so subtract 1 here):</p>
+<ol>
+<li>A-B: Alice sends 8 of her own Circles (A) to Bob.<ul>
+<li><code>(amount = 8, streamSinkId = 0)</code></li>
+<li>coordinates <code>(A, A, B)</code></li>
+</ul>
+</li>
+<li>B-D: Bob sends 4 of Charlie's Circles (C) to David.<ul>
+<li><code>(amount = 4, streamSinkId = 2)</code></li>
+<li>coordinates <code>(C, B, D)</code></li>
+</ul>
+</li>
+<li>B-C: Bob sends 5 of his own Circles (B) to Charlie.<ul>
+<li><code>(amount = 5, streamSinkId = 0)</code></li>
+<li>coordinates <code>(B, B, C)</code></li>
+</ul>
+</li>
+<li>B-D: Bob sends 3 of Charlie's Circles (C) to David.<ul>
+<li><code>(amount = 3, streamSinkId = 1)</code></li>
+<li>coordinates <code>(C, D, D)</code></li>
+</ul>
+</li>
+<li>C-E: Charlie sends 5 of David's Circles (D) to Eva.<ul>
+<li><code>(amount = 5, streamSinkId = 3)</code></li>
+<li>coordinates <code>(D, C, E)</code></li>
+</ul>
+</li>
+</ol>
+<h4 id="stream-explanation">Stream Explanation</h4>
+<ul>
+<li>Stream 1: Alice intends to send 3 Circles from her to David.<ul>
+<li><code>sourceCoordinate = 0</code> (Alice)</li>
+<li><code>flowEdgeIds = [3]</code> (fourth edge B-D is the single terminal edge for stream 1)</li>
+<li><code>data</code> (some message Alice sends along to David)</li>
+</ul>
+</li>
+<li>Stream 2: Bob intends to send 4 Circles to David. <ul>
+<li><code>sourceCoordinate = 1</code> (Bob)</li>
+<li><code>flowEdgeIds = [1]</code> (second edge B-D is single terminal edge for stream 2)</li>
+<li><code>data</code></li>
+</ul>
+</li>
+<li>Stream 3: Alice intends to send 5 Circles to Eva.<ul>
+<li><code>sourceCoorindate = 0</code></li>
+<li><code>flowEdgeIds = [4]</code> (fifth edge C-E terimates stream 3)</li>
+<li><code>data</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="net-flow-and-consistency-check">Net Flow and Consistency Check</h2>
+<p>The net flow is not sent as input to the contracts, rather it is included in the diagram to illustrate the consistency check that the contract performs.
+For an explicit path of flow edges to be a valid solution to the set of intents expressed in the streams, it must hold that
+for every vertex the sum over all flow edges (modulo Circles Id) must equal the sum over all streams (ie. summing the columns).</p>
+<p>Streams themselves don't specify an amount though - both to compactify the representation but also to not over-determine the representation. Instead it is checked that for each stream:</p>
+<ul>
+<li>all the terminal edges that reference this stream have the same receiver.</li>
+<li>that each stream lists their terminal flow edge ids in ascending order.</li>
+<li>and that the count of terminal edges that reference a stream, matches the length of the <code>flowEdgeIds</code> array of that stream.</li>
+</ul>
+<p>By cross-referencing, and checking consistency we ensure that we can use the sum of the terminal edges for a stream as the amount intended to send by that stream.</p>
+<p>In our example, all streams only had one terminal flow edge, but in general a flow matrix can have multiple terminal flow edges for a single stream.</p>
+<h2 id="technical-implementation">Technical Implementation</h2>
+<p>The <code>Hub</code> contract implements path-based transactions through the <code>operateFlowMatrix</code> function. Let's break down its key components:</p>
+<h3 id="function-signature">Function Signature</h3>
+<pre><code class="language-solidity">function operateFlowMatrix(
+    address[] calldata _flowVertices,
+    FlowEdge[] calldata _flow,
+    Stream[] calldata _streams,
+    bytes calldata _packedCoordinates
+) external nonReentrant(0)
+</code></pre>
+<h3 id="key-steps-in-processing">Key Steps in Processing</h3>
+<p>The function performs several crucial steps:</p>
+<ol>
+<li><strong>Unpacking Coordinates</strong>: The packed coordinates are unpacked into an array of uint16 values.</li>
+<li><strong>Authorization Check</strong>: Ensures all senders (as listed in the streams) have authorized the operator calling this function (with <code>ERC1155::setApprovalForAll()</code>).</li>
+<li><strong>Flow Matrix Verification</strong>: Checks the correctness of the flow matrix, including trust relationships and avatar registrations.</li>
+<li><strong>Path Transfers</strong>: Executes the individual transfers defined by the flow edges.</li>
+<li><strong>Acceptance Checks</strong>: Calls acceptance checks for the streams and calculates the netted flows.</li>
+<li><strong>Flow Matching</strong>: Ensures the netted flows from streams match the verified flow matrix.</li>
+</ol>
+<p>The important internal functions that accomplish these above steps are the following:</p>
+<ul>
+<li><strong>_verifyFlowMatrix</strong><ul>
+<li>Ensures all vertices are registered avatars.</li>
+<li>Verifies that receivers trust the Circles being sent.</li>
+<li>Calculates the netted flow for each vertex.</li>
+</ul>
+</li>
+<li><strong>_effectPathTransfers</strong><ul>
+<li>Processes each flow edge, either as a transfer or a group mint.</li>
+<li>Keeps track of stream definitions and ensures their correctness.</li>
+</ul>
+</li>
+<li><strong>_callAcceptanceChecks</strong><ul>
+<li>Calls acceptance checks for each stream.</li>
+<li>Emits <code>StreamCompleted</code> events for successful "effective transfers" for each stream.</li>
+</ul>
+</li>
+</ul>
+<h2 id="minting-group-circles-along-a-path">Minting Group Circles along a Path</h2>
+<p>The Circles ecosystem allows for the minting of group Circles as part of path-based transactions. This feature enables dynamic creation of group tokens within complex transfer paths, enhancing the liquidity and utility of the system.</p>
+<h3 id="how-group-minting-works-in-path-transactions">How Group Minting Works in Path Transactions</h3>
+<ol>
+<li>
+<p><strong>Flow Edge to Group Avatar</strong>: When a flow edge in the path has a receiver that is a registered group avatar, the system treats this as a group minting operation instead of a regular transfer.</p>
+</li>
+<li>
+<p><strong>Collateral for Minting</strong>: The tokens being sent to the group in this flow edge are used as collateral for minting new group Circles.</p>
+</li>
+<li>
+<p><strong>Automatic Minting</strong>: The <code>_groupMint</code> function is called internally, creating new group Circles based on the collateral provided.</p>
+</li>
+<li>
+<p><strong>Mint Policies</strong>: Each group has an associated mint policy contract that determines the rules for minting new group Circles. This policy is consulted during the minting process.</p>
+</li>
+</ol>
+<h3 id="implementation-details">Implementation Details</h3>
+<p>The <code>_effectPathTransfers</code> function in the Hub contract handles the minting of group Circles within a path:</p>
+<pre><code class="language-solidity">if (!isGroup(to)) {
+    // Regular transfer for non-group receivers
+    _update(
+        _flowVertices[_coordinates[index + 1]], // sender
+        to,
+        ids,
+        amounts
+    );
+} else {
+    // Group minting for group receivers
+    _groupMint(
+        _flowVertices[_coordinates[index + 1]], // sender
+        to, // receiver
+        to, // group
+        ids, // collateral
+        amounts, // amounts
+        &quot;&quot;, // No additional data for path-based group mints
+        false // Indicate this is part of a path, not an explicit call
+    );
+}
+</code></pre>
+<h3 id="key-aspects-of-group-minting-in-paths">Key Aspects of Group Minting in Paths</h3>
+<ol>
+<li>
+<p><strong>Implicit Minting</strong>: Group minting occurs automatically when a group is the receiver in a flow edge, without requiring explicit minting instructions.</p>
+</li>
+<li>
+<p><strong>Collateral Transfer</strong>: The tokens sent to the group are transferred to the group's treasury contract as collateral.</p>
+</li>
+<li>
+<p><strong>Mint Policy Checks</strong>: The group's mint policy is consulted to ensure the minting operation is valid according to the group's rules.</p>
+</li>
+<li>
+<p><strong>No Additional Data</strong>: When minting occurs as part of a path, no additional data is passed to the mint policy (unlike in explicit group mint calls when the caller can pass data to the group mint policy).</p>
+</li>
+<li>
+<p><strong>Trust Relationships</strong>: The system checks that the group trusts the collateral being provided (i.e., the actual tokens being sent, not the sender of the flow edge).</p>
+</li>
+</ol>
+<h3 id="implications-and-benefits">Implications and Benefits</h3>
+<ul>
+<li><strong>Dynamic Token Creation</strong>: Allows for the creation of new group tokens as part of complex transfer paths.</li>
+<li><strong>Increased Liquidity</strong>: Facilitates the conversion from personal (or group Circles) into (other) group Circles within a single flow edge. Group Circles are likely to be trusted by more and hence accepted by more, reducing the number of hops in the graph a path needs to traverse to reach far away recipients.</li>
+<li><strong>Flexible Economic Structures</strong>: Enables more complex economic interactions and structures within the Circles ecosystem.</li>
+<li><strong>Seamless Integration</strong>: Group minting is seamlessly integrated into the path-based transaction system, requiring no special handling from the transaction initiator.</li>
+</ul>
+<p>This feature significantly enhances the capabilities of path-based transactions in Circles, allowing for dynamic and flexible token interactions that can adapt to the needs of the network and its participants.
+[Previous content remains unchanged]</p>
+<h2 id="trust-and-consented-flow">Trust and Consented Flow</h2>
+<h3 id="trust-implies-a-flow-edge">Trust Implies a Flow Edge</h3>
+<p>The default behavior for Circles is such that if one avatar trusts another avatar, they attest that:</p>
+<ol>
+<li>
+<p><strong>Token Acceptance</strong>: They are willing to accept the trusted avatar's personal Circles tokens as payment.</p>
+</li>
+<li>
+<p><strong>Implicit Flow Permission</strong>: They allow their balance of the trusted avatar's tokens to be used in path-based transactions, potentially without their direct involvement in each transaction.</p>
+</li>
+<li>
+<p><strong>Network Facilitation</strong>: They contribute to the overall liquidity and connectivity of the Circles network by creating a potential path for transactions.</p>
+</li>
+<li>
+<p><strong>Value Recognition</strong>: They recognize some form of value or merit in the trusted avatar's economic activity or contribution to the community.</p>
+</li>
+<li>
+<p><strong>Transitive Trust</strong>: While not directly trusting the entire network of the trusted avatar, they implicitly allow for multi-hop transactions that may involve avatars further down the trust chain.</p>
+</li>
+<li>
+<p><strong>Time-Bound Relationship</strong>: Trust relationships have an expiry time, allowing for dynamic changes in the trust network over time.</p>
+</li>
+</ol>
+<p>This default behavior enables the Circles system to create paths for transactions between avatars who may not directly trust each other, facilitating a more interconnected and fluid economy.</p>
+<h3 id="consented-flow">Consented Flow</h3>
+<p>Consented flow is an advanced feature in the Circles ecosystem that provides additional control over path-based transfers. It's an opt-in mechanism that allows people (and groups or organizations) to have more granular control over how their Circles tokens are used in path-based transactions.</p>
+<h4 id="key-aspects-of-consented-flow">Key Aspects of Consented Flow</h4>
+<ol>
+<li><strong>Opt-In Feature</strong>: Avatars must explicitly enable consented flow by setting an advanced usage flag.</li>
+<li><strong>Bidirectional Trust Requirement</strong>: When consented flow is enabled, a valid flow edge requires:<ul>
+<li>The receiver trusts the Circles avatar of the tokens being sent (standard requirement).</li>
+<li>The sender trusts the receiver.</li>
+<li>The receiver must also have consented flow enabled.</li>
+</ul>
+</li>
+<li><strong>Recursive Protection</strong>: The requirement for the receiver to also have consented flow enabled ensures that the protection extends through multiple hops in a transaction path, for those flow edges that enter a region of consented flow.</li>
+<li><strong>Enhanced Control</strong>: Provides more precise control over how an avatar's tokens can be used in the network, potentially reducing unexpected or undesired token movements.</li>
+<li><strong>Impact on Liquidity</strong>: While offering more security, consented flow may make some transactions more challenging to complete, as it requires more tightly-knit web of trust relationships.</li>
+</ol>
+<h4 id="behaviour-details">Behaviour Details</h4>
+<p>The <code>isPermittedFlow</code> function in the Hub contract implements the logic for checking whether a flow edge is permitted (with or without consented flow enabled for the sender):</p>
+<ol>
+<li><strong>Basic Trust Check</strong>: <ul>
+<li>Always checks if the receiver trusts the Circles being sent.</li>
+<li>If this basic trust doesn't exist, the flow is never permitted.</li>
+</ul>
+</li>
+<li><strong>Consented Flow Check</strong>:<ul>
+<li>If the sender has consented flow enabled (checked via <code>advancedUsageFlags</code>), additional checks are performed:<ol>
+<li>The sender must trust the receiver.</li>
+<li>The receiver must also have consented flow enabled.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>Return Value</strong>: <ul>
+<li>Returns <code>true</code> if the flow is permitted based on the above checks.</li>
+<li>Returns <code>false</code> otherwise.</li>
+</ul>
+</li>
+</ol>
+<h4 id="implications-of-consented-flow">Implications of Consented Flow</h4>
+<ol>
+<li><strong>Enhanced Security</strong>: Provides an additional layer of control for avatars concerned about unauthorized use of their tokens.</li>
+<li><strong>Potential Complexity</strong>: May increase the complexity of finding valid paths for transactions, especially if a sender with consented flow is trying to send tokens to a receiver outside the consented flow perimeter (ie. a receiver without consented flow enabled). The sender may be required to sandwich their path-transfer between disabling and re-enabling consented flow for themselves, so that their path can start from outside the local consented flow perimeter.</li>
+<li><strong>Network Dynamics</strong>: Could influence the overall structure and behavior of the Circles trust network, potentially leading to more tightly-knit, high-trust sub-networks.</li>
+<li><strong>Flexibility</strong>: Allows for different trust models within the same network, catering to varying preferences for control and openness.</li>
+</ol>
+<p>Consented flow represents an advanced usage of the Circles system, allowing for a more nuanced approach to trust and token flow within the network. It balances the need for additional control with the system's goal of creating a fluid, interconnected economy.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The Circles ecosystem implements path-based transactions using flow matrices to enable multi-hop transfers of personal and group tokens. This system allows for:</p>
+<ol>
+<li>Complex transfers between indirectly connected avatars</li>
+<li>Automatic group token minting within transaction paths</li>
+<li>Flexible trust models, including opt-in consented flow for enhanced control</li>
+</ol>
+<p>These mechanisms collectively form a decentralized currency network capable of supporting diverse economic interactions and trust relationships. The technical infrastructure provides a foundation for a social currency system that can adapt to various community needs and transaction complexities.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../inflation-demurrage/" class="btn btn-neutral float-left" title="Inflation and Demurrage"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../inflation-demurrage/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

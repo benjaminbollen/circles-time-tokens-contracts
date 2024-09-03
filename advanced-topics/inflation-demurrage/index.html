@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Inflation and Demurrage - Circles Protocol</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Inflation and Demurrage";
+        var mkdocs_page_input_path = "advanced-topics/inflation-demurrage.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Circles Protocol
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../introduction/">Introduction</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../architecture/">Architectural Overview</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Inflation and Demurrage</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#key-features-of-demurrage-in-circles">Key Features of Demurrage in Circles</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#erc1155-interface-and-demurrage">ERC1155 Interface and Demurrage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#balance-queries">Balance Queries</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#transfers">Transfers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#token-id-convention">Token ID Convention</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#demurrage-calculation">Demurrage Calculation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#balance-reduction">Balance Reduction</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#practical-effects">Practical Effects</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implementation-considerations">Implementation Considerations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#development-guidelines">Development Guidelines</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#time-and-day-calculation-in-circles">Time and Day Calculation in Circles</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#the-day-function">The day Function</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#demurrage-vs-inflationary-balances">Demurrage vs Inflationary Balances</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#practical-implications">Practical Implications</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#helper-functions-for-inflationary-conversion">Helper Functions for Inflationary Conversion</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../path-based-transactions/">Path-based Transactions</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Circles Protocol</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Advanced Topics</li>
+      <li class="breadcrumb-item active">Inflation and Demurrage</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="demurrage-mechanism-in-circles-developers-guide">Demurrage Mechanism in Circles: Developer's Guide</h1>
+<h2 id="overview">Overview</h2>
+<p>Circles implements demurrage as a systematic reduction of token balances over time, applied to all token balances in the system, affecting both personal and group currencies. The system extends the ERC1155 multi-token standard to incorporate this demurrage mechanism.</p>
+<p>Additionally, Circles allows wrapping ERC1155 tokens (in a demurrage representation) into an ERC20 contract. For each Circles identifier (personal or group), two ERC20 contracts can be created: one for demurrage representation and one for inflationary representation.</p>
+<h3 id="key-features-of-demurrage-in-circles">Key Features of Demurrage in Circles</h3>
+<ol>
+<li><strong>Annual Rate</strong>: 7% reduction in token balances per year</li>
+<li><strong>Daily Application</strong>: Calculated and applied on a per-day basis</li>
+<li><strong>Universal</strong>: Affects all Circles tokens equally</li>
+</ol>
+<h2 id="erc1155-interface-and-demurrage">ERC1155 Interface and Demurrage</h2>
+<p>Circles extends the standard ERC1155 interface to handle demurrage. Key functions include:</p>
+<h3 id="balance-queries">Balance Queries</h3>
+<pre><code class="language-js">function balanceOf(address account, uint256 id) public view returns (uint256)
+</code></pre>
+<p>Returns the current demurraged balance of <code>account</code> for token <code>id</code>. This function internally calls <code>balanceOfOnDay</code> with the current day.</p>
+<pre><code class="language-js">function balanceOfOnDay(address account, uint256 id, uint64 day)
+    public view returns (uint256 balance, uint256 discountCost)
+</code></pre>
+<p>Returns the demurraged balance for <code>account</code> and <code>id</code> as of the specified <code>day</code>, along with the <code>discountCost</code> (amount of tokens "burned" due to demurrage).</p>
+<h3 id="transfers">Transfers</h3>
+<pre><code class="language-js">function safeTransferFrom(address from, address to, uint256 id, uint256 value, bytes memory data) public
+</code></pre>
+<p>Transfers <code>value</code> amount of token <code>id</code> from <code>from</code> to <code>to</code>, applying demurrage before transfer to both sender and receiver if applicable.</p>
+<h3 id="token-id-convention">Token ID Convention</h3>
+<p>Token IDs in Circles are derived from addresses:</p>
+<pre><code class="language-js">function toTokenId(address _avatar) public pure returns (uint256) {
+    return uint256(uint160(_avatar));
+}
+</code></pre>
+<h2 id="demurrage-calculation">Demurrage Calculation</h2>
+<h3 id="balance-reduction">Balance Reduction</h3>
+<p>The system reduces token balances daily by a factor calculated as:</p>
+<pre><code class="language-sh">Daily Factor = (1 - 0.07)^(1/365.25) ≈ 0.99980813
+</code></pre>
+<p>This results in a compound 7% reduction over a full year.</p>
+<h3 id="practical-effects">Practical Effects</h3>
+<ul>
+<li>A balance of 100 Circles reduces to approximately 99.98081 Circles after one day</li>
+<li>Over 365 days, 100 Circles reduces to about 93 Circles</li>
+</ul>
+<h2 id="implementation-considerations">Implementation Considerations</h2>
+<ol>
+<li><strong>On-Demand Calculation</strong>: Balance reductions are computed when balances are accessed (through view functions) or computed and updated when modified (through transfers).</li>
+<li><strong>Token Burning</strong>: The reduction in balance burns the amount that gets demurraged, effectively removing these tokens from circulation.</li>
+<li><strong>Gas Efficiency</strong>: On-demand calculation avoids the need for daily update transactions.</li>
+<li><strong>Precision</strong>: 128-bit fixed-point arithmetic ensures high accuracy in calculations, allowing for daily updates.</li>
+</ol>
+<h2 id="development-guidelines">Development Guidelines</h2>
+<ol>
+<li>Always use <code>balanceOf()</code> or <code>balanceOfOnDay()</code> to get current, demurraged balances.</li>
+<li>On the hub contract, all amounts are to be understood as demurraged amounts on the current day.</li>
+<li>Be aware that token balances decrease over time, even without explicit transfers or actions.</li>
+<li>If your application expects static (ie. inflationary) balances or to interface with external systems:<ul>
+<li>Use the provided <code>InflationaryOperator</code> contract to interact with ERC1155 Circles.</li>
+<li>Alternatively, wrap the (group) Circles you want to interact with in an inflationary ERC20 contract, where you can treat them as regular ERC20 tokens.</li>
+</ul>
+</li>
+</ol>
+<h2 id="time-and-day-calculation-in-circles">Time and Day Calculation in Circles</h2>
+<p>Understanding how Circles handles time is crucial for working with demurraged balances. The system uses a concept of "days" since a fixed starting point to calculate demurrage.</p>
+<h3 id="the-day-function">The <code>day</code> Function</h3>
+<pre><code class="language-js">function day(uint256 timestamp) internal view returns (uint64) {
+    return uint64((timestamp - inflationDayZero) / 1 days);
+}
+</code></pre>
+<p>This function converts a Unix timestamp to a day number used in demurrage calculations. Key points:</p>
+<ol>
+<li>
+<p><strong>Inflation Day Zero</strong>: This is the starting point for all time calculations in Circles. It's set to October 15, 2020, at 00:00:00 UTC (Unix timestamp: 1602720000).</p>
+</li>
+<li>
+<p><strong>Day Calculation</strong>: Days are calculated as the number of whole days passed since Inflation Day Zero.</p>
+</li>
+<li>
+<p><strong>Usage</strong>: This day number is used in all demurrage calculations to determine how much a balance has decreased over time.</p>
+</li>
+</ol>
+<h3 id="demurrage-vs-inflationary-balances">Demurrage vs Inflationary Balances</h3>
+<ul>
+<li><strong>Demurrage Balances</strong>: These are time-dependent. The actual balance at any given moment is a function of the stored balance, the last update day, and the current day.</li>
+<li><strong>Inflationary Balances</strong>: These are static in time. They represent an equivalent way of representing the 7% p.a. "inflation", but through an ever-increasing money supply. In the inflationary representation, Circles mints slightly more tokens per hour each day than the previous day, to offset the existing Circles already in circulation.</li>
+</ul>
+<p>Note that the ground-truth for Circles is the demurrage representation, where exactly one Circle is minted per person per hour, offset by the daily burning of Circles at a rate equivalent to 7% p.a.</p>
+<h3 id="practical-implications">Practical Implications</h3>
+<ol>
+<li>
+<p>When querying balances, the current day is always used to calculate the up-to-date demurraged balance.</p>
+</li>
+<li>
+<p>For future projections, you can specify a different day using <code>balanceOfOnDay()</code>.</p>
+</li>
+<li>
+<p>When converting between demurrage and inflationary representations, the day parameter determines the point in time for the conversion.</p>
+</li>
+</ol>
+<h2 id="helper-functions-for-inflationary-conversion">Helper Functions for Inflationary Conversion</h2>
+<p>Circles provides two helper functions to convert between demurraged and inflationary representations:</p>
+<pre><code class="language-js">function convertInflationaryToDemurrageValue(uint256 _amount, uint64 _day)
+    public view returns (uint256)
+</code></pre>
+<p>Converts an inflationary amount to its demurraged equivalent as of the specified day.</p>
+<pre><code class="language-js">function convertDemurrageToInflationaryValue(uint256 _amount, uint64 _dayUpdated)
+    public view returns (uint256)
+</code></pre>
+<p>Converts a demurraged amount as on the day provided to its inflationary equivalent.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Understanding the demurrage mechanism is crucial for developers working with Circles. Always consider the time-dependent nature of token balances and use the provided functions to ensure accurate balance calculations and transfers.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../architecture/" class="btn btn-neutral float-left" title="Architectural Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../path-based-transactions/" class="btn btn-neutral float-right" title="Path-based Transactions">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../architecture/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../path-based-transactions/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

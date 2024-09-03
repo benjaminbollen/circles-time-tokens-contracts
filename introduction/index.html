@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Introduction - Circles Protocol</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Introduction";
+        var mkdocs_page_input_path = "introduction.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Circles Protocol
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Introduction</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#brief-overview">Brief Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#purpose-and-goals-of-circles">Purpose and Goals of Circles</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#key-concepts">Key Concepts</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#personal-currencies">Personal Currencies</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#trust-networks">Trust Networks</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#demurrage">Demurrage</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#total-supply-and-equilibrium">Total Supply and Equilibrium</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architectural Overview</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced-topics/inflation-demurrage/">Inflation and Demurrage</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced-topics/path-based-transactions/">Path-based Transactions</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Circles Protocol</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Introduction</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="introduction-to-circles">Introduction to Circles</h1>
+<h2 id="brief-overview">Brief Overview</h2>
+<p>Circles is a digital protocol designed to create and distribute fair and social money through personal currencies. It harnesses the power of decentralized technology to implement a system of interconnected, individual economic units that collectively form a larger, more equitable economic network.</p>
+<p>The Circles protocol is built on the Gnosis Chain blockchain, utilizing smart contracts to manage the creation, distribution, and transfer of personal currencies. At its core, Circles employs an ERC1155 multi-token standard, enabling efficient handling of multiple token types (different personal and group Circles -- more on groups later) within a single contract.</p>
+<h2 id="purpose-and-goals-of-circles">Purpose and Goals of Circles</h2>
+<p>The primary purpose of Circles is to create a more inclusive and sustainable economic system through the equitable issuance of money to all participants. In pursuing this vision, Circles aims to:</p>
+<ol>
+<li>Introduce community currencies that reduce economic inequality by ensuring a baseline level of economic participation for all.</li>
+<li>Foster community connections and strengthen local economies through trust-based currency networks.</li>
+<li>Promote sustainable economic growth by implementing a demurrage system that discourages hoarding and encourages circulation.</li>
+<li>Provide a flexible framework for various economic experiments and community-driven initiatives.</li>
+<li>Empower individuals and communities to have greater control over their economic interactions and monetary systems.</li>
+</ol>
+<h2 id="key-concepts">Key Concepts</h2>
+<h3 id="personal-currencies">Personal Currencies</h3>
+<p>In the Circles ecosystem, each individual can mint their own personal currency. This feature of the protocol empowers every participant to become an issuer of their own personal Circles. The Hub contract manages both the registration of individuals (referred to as "humans" in the contract) and the issuance of their personal currencies.</p>
+<p>Key points about personal currencies:</p>
+<ul>
+<li>Each registered human can mint a deterministic amount of their personal currency at a consistent rate of one Circle per hour.</li>
+<li>Minting is retroactive, allowing claims for up to 14 days of past elapsed time.</li>
+<li>The mintable amount is calculated based on the number of complete hours passed since the last issuance of Circles.</li>
+<li>Circles undergo daily demurrage at a rate equivalent to 7% per year. Issuance for past days accounts for this demurrage, ensuring fair distribution over time. (Further details on demurrage are discussed in a later section)</li>
+<li>Personal currencies are represented as unique tokens within the ERC1155 multi-token system, with each token ID derived from the address of the human's avatar.</li>
+<li>The <code>personalMint()</code> function in the Hub contract manages the minting process.</li>
+</ul>
+<p>This system ensures a fair, time-based issuance of personal currencies while implementing mechanisms to encourage active participation in the Circles economy.</p>
+<h3 id="trust-networks">Trust Networks</h3>
+<p>Trust is a fundamental concept in the Circles protocol. It allows personal currencies to become valuable and transferable within the network. The trust system is implemented in the Hub contract through the following mechanisms:</p>
+<ul>
+<li>People can establish trust relationships with other entities (people, organizations, or groups) using the <code>trust()</code> function.</li>
+<li>Trust relationships can be set with expiration times, allowing for dynamic trust networks. Alternatively, trust can be established indefinitely by setting the expiration to the maximum possible future time.</li>
+<li>The trust network is leveraged to enable transitive transfers of Circles along paths of trust. The <code>isPermittedFlow()</code> function verifies if a transitive transfer is permissible based on the trust relationships between the involved parties and the specific currency being transferred.</li>
+<li>Circles still function as a normal token, for explicit <code>ERC1155:safe(Batch)TransferFrom()</code> or <code>ERC20:transfer()</code> no constraints of the transitive transfer of the trust network apply.</li>
+<li>Trust relationships can be established not only between individuals but also between people, organizations, and groups, creating a diverse and interconnected economic ecosystem.</li>
+</ul>
+<p>Trust networks enable:</p>
+<ul>
+<li>Path-based transactions, where currencies can be exchanged through chains of trust connections.</li>
+<li>Community-building, as users create economic connections with individuals and entities they trust.</li>
+<li>A decentralized approach to currency valuation and acceptance, based on social and organizational relationships rather than centralized authority.</li>
+<li>Flexible economic interactions between various types of actors within the Circles ecosystem.</li>
+</ul>
+<h3 id="demurrage">Demurrage</h3>
+<p>Demurrage in currency systems is an economic concept where a cost is associated with holding a currency over time. In Circles, this mechanism is implemented to encourage circulation of the currency and mitigate extreme inequities. Demurrage ensures that at any future point, one hour can be issued as one Circle, while maintaining a maximum total supply of Circles.</p>
+<p>In the Hub contract, all balances and transfer amounts used as function arguments are, by default, understood as demurraged amounts for the present day. However, to facilitate interactions with other smart contracts, Circles also offers a static (non-rebalancing) token representation. This static, inflationary representation of all balances and transfer functions is available both in the ERC1155 and ERC20 representations.</p>
+<p>The Circles contract incorporates a demurrage system with the following key characteristics:</p>
+<ul>
+<li>Circles have a 7% p.a. demurrage cost applied to them in the contracts, rebalancing the amounts.</li>
+<li>Demurrage is applied on an equivalent daily basis, ensuring that during a period of a day balances are not continuously adjusted.</li>
+<li>Balances are stored as "discounted balances" that automatically decrease in value over time.</li>
+<li>The <code>calculateIssuance()</code> function in the Circles contract factors in demurrage when determining the amount of new currency to mint for an individual.</li>
+<li>Demurrage applies uniformly to both personal currencies and group currencies.</li>
+</ul>
+<p>This system ensures that:</p>
+<ul>
+<li>The currency remains active and circulating within the community.</li>
+<li>Circles are issued equitably across individuals and over time.</li>
+<li>A clear unit of account is established, with one Circle representing one hour of an individual's time.</li>
+<li>Circles serves as both a robust store of value and an effective means of exchange.</li>
+</ul>
+<p>By integrating these key concepts - personal currencies, trust networks, and demurrage - Circles creates an economic system that aims to provide a fairly issued, socially-rooted monetary framework, foster community connections and promote active participation in the local economy.</p>
+<h2 id="total-supply-and-equilibrium">Total Supply and Equilibrium</h2>
+<p>The Circles protocol implements an economic model where the minting of new Circles and the demurrage mechanism work together to create an equilibrium in the total supply. This balance is crucial for maintaining the long-term stability and fairness of the system.</p>
+<p>Key aspects of the total supply mechanism:</p>
+<ol>
+<li>Issuance Rate: Each registered human can mint one Circle per hour, which translates to 24 Circles per day or 8760 Circles per year (not accounting for leap years).</li>
+<li>Demurrage Rate: All Circles undergo a 7% annual demurrage, applied on a daily basis.</li>
+<li>Equilibrium Point: The issuance and demurrage rates are carefully calibrated so that they balance each other out at a specific point, creating a maximum total supply for each personal currency.</li>
+<li>Maximum Total Supply Calculation:<ul>
+<li>Let x be the maximum total supply in Circles.</li>
+<li>Annual issuance: 8760 Circles</li>
+<li>Annual demurrage: 7% of x</li>
+<li>At equilibrium: 8760 = 0.07x</li>
+<li>Solving for x: x = 8760 / 0.07 = 125,142.86 Circles</li>
+</ul>
+</li>
+<li>Dynamic Balance: As new Circles are minted, they contribute to the total supply. However, the demurrage mechanism ensures that the total value of existing Circles decreases over time. This creates a dynamic where the total supply approaches but never exceeds the equilibrium point.</li>
+<li>Practical Implications:<ul>
+<li>For a new participant, after 14 years of continuous minting they would reach 62% of the maximum supply, assuming no spending. To reach 95% of the total supply, 42.79 years of minting is required.</li>
+<li>In practice, as people might not mint all their Circles, or Circles get burnt in usage the total supply of their personal Circles token will fluctuate below this theoretical maximum.</li>
+<li>Each person, organization, group or account can earn Circles from others though in an open economy so anyone's balance can well exceed 125k Circles by holding a variety of different Circles in their wallet.</li>
+</ul>
+</li>
+<li>System-wide Effects: While each personal currency has its own maximum supply, the trust network and transferability of Circles create a larger, interconnected economy. The total supply in effect can be thought of as a multiple of 125k CRC for every non-sybil human participating in the network.</li>
+</ol>
+<p>This equilibrium mechanism is crucial for several reasons:</p>
+<ul>
+<li>It ensures long-term stability in the value of Circles.</li>
+<li>It maintains fairness by preventing early adopters from gaining disproportionate economic power.</li>
+<li>It creates a predictable and sustainable monetary policy for the Circles ecosystem.</li>
+</ul>
+<p>The total supply mechanism is implemented through the interaction of the <code>personalMint()</code> function and the demurrage calculations in the Circles contract.
+By dynamically managing the total supply through this issuance and demurrage equilibrium, Circles creates a fair, stable, and sustainable economic system that aligns with its goals of reducing inequality and fostering community connections.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../about/" class="btn btn-neutral float-left" title="About"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../architecture/" class="btn btn-neutral float-right" title="Architectural Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../about/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

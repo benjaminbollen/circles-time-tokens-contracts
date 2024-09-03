@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Architectural Overview - Circles Protocol</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Architectural Overview";
+        var mkdocs_page_input_path = "architecture.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Circles Protocol
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">About</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../introduction/">Introduction</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Architectural Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#system-architecture-diagram">System Architecture Diagram</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#core-components">Core Components</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#hub-v2-circles">Hub v2 (Circles)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nameregistry">NameRegistry</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#migration">Migration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#groups-policies-and-treasury">Groups, Policies and Treasury</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#groups">Groups</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#standard-treasury">Standard Treasury</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#vaults">Vaults</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#mint-policy">Mint Policy</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#system-interaction">System Interaction</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#remarks">Remarks</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#token-representations">Token Representations</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#circles-erc1155">Circles (ERC1155)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#erc20-wrappers">ERC20 Wrappers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#erc20lift">ERC20Lift</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#circles-v1-components-legacy">Circles v1 Components (Legacy)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#hub-v1">Hub v1</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#token">Token</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced-topics/inflation-demurrage/">Inflation and Demurrage</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced-topics/path-based-transactions/">Path-based Transactions</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Circles Protocol</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Architectural Overview</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="circles-architectural-overview">Circles Architectural Overview</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Circles is a decentralized economic system built on the Gnosis Chain, designed to create and distribute fair and social money through personal currencies. This overview provides a high-level understanding of the system's architecture and how its various components interact.</p>
+<h2 id="system-architecture-diagram">System Architecture Diagram</h2>
+<p><img alt="Alt text" src="../20240321-Circles-contracts.svg" /></p>
+<p><a href="https://link.excalidraw.com/readonly/EuVbVxV3LE0AZ3Od5rpP" target="_blank" rel="noopener noreferrer">
+  Open Circles Architecture diagram in new tab
+</a></p>
+<h2 id="core-components">Core Components</h2>
+<h3 id="hub-v2-circles">Hub v2 (Circles)</h3>
+<p>The central contract in the Circles ecosystem is the Hub v2, which serves as the main entry point for interactions with the system. It manages:</p>
+<ul>
+<li>Registration of humans, organizations, and groups</li>
+<li>Minting of personal currencies</li>
+<li>Trust relationships between entities</li>
+<li>Group creation and management</li>
+<li>Minting collateral into group currencies</li>
+<li>Wrapping ERC1155 Circles Ids tokens into ERC20 wrappers</li>
+<li>Demurrage of all Circles tokens equally </li>
+</ul>
+<p>The Hub v2 contract implements the ERC1155 standard, allowing it to handle multiple token types efficiently.</p>
+<p><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/hub/Hub.sol" target="_blank" rel="noopener noreferrer">Code: /src/hub/Hub.sol</a></p>
+<h3 id="nameregistry">NameRegistry</h3>
+<p>The NameRegistry contract manages names, symbols and metadata for avatars (humans, groups, and organizations):</p>
+<ul>
+<li>Allows humans to register a unique short name (12 characters, base58 encoding)</li>
+<li>Stores custom names for groups and organizations</li>
+<li>Manages custom symbols for group currencies</li>
+<li>Stores and updates metadata digests (eg IPFS CIDs) for avatar profiles</li>
+<li>Names are read by ERC20 contracts for name and symbol</li>
+</ul>
+<p>The NameRegistry plays a role in identity management and human-readable addressing within the Circles system, enhancing user experience and facilitating easier identification of avatars and their associated currencies.</p>
+<p><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/names/NameRegistry.sol" target="_blank" rel="noopener noreferrer">Code: /src/names/NameRegistry.sol</a></p>
+<h3 id="migration">Migration</h3>
+<p>The Migration contract facilitates the transition from Circles v1 to v2, ensuring the ability to migrate token balances:</p>
+<ul>
+<li>Converts v1 Circles to v2 Circles, accounting for inflation and demurrage</li>
+<li>Uses a linear interpolation method to calculate the conversion rate. Corrects for the original convention in hub v1 where 1/3 CRC per hour is issued (8 CRC per day)</li>
+<li>Allows migration of multiple types of Circles balances in a single transaction by one owner</li>
+<li>Locks v1 tokens in the Migration contract and mints equivalent v2 tokens.</li>
+<li>Ensures upon migrating balances that humans are auto-registered in Hub v2 - so that their token is defined</li>
+<li>owners of Circles in v1 can migrate their balances at any time and for any amount they chose to Circles v2.</li>
+</ul>
+<p>This Migration system ensures a controlled and secure transition from Circles v1 to v2, maintaining integrity throughout the upgrade process.</p>
+<p><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/migration/Migration.sol" target="_blank" rel="noopener noreferrer">Code: /src/migration/Migration.sol</a></p>
+<h3 id="groups-policies-and-treasury">Groups, Policies and Treasury</h3>
+<p>The Circles ecosystem includes a system for managing group currencies, which allows communities and actors to create their own Circles with customizable policies. This system involves several interconnected components:</p>
+<h4 id="groups">Groups</h4>
+<p>Group avatars (unlike human avatars) cannot mint Circles based on time. Rather group Circles are minted by collaterlising existing Circles into the group if the group trusts that collateral - and a group mint policy can further refine the conditions under which minting is possible.</p>
+<p>Groups register as a group avatar in the Hub contract. They have two registration options:</p>
+<ul>
+<li><code>registerGroup()</code>: Uses the <code>StandardTreasury</code> contract (recommended).</li>
+<li><code>registerCustomGroup()</code>: Allows the use of a custom treasury contract.</li>
+</ul>
+<p>It is recommended that all groups rely on the standard treasury contract. Users should exercise caution when interacting with custom groups.</p>
+<p>Groups require a <code>MintPolicy</code> upon registration, which defines the rules for minting, burning, and redeeming the group's currency.</p>
+<p>To explicitly mint group Circles, the owner of collateral for a group can call <code>hub:groupMint()</code>. <a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/hub/Hub.sol#L412-L430" target="_blank" rel="noopener noreferrer">Code: /src/hub/Hub.sol:groupMint()</a></p>
+<h4 id="standard-treasury">Standard Treasury</h4>
+<p>The Standard Treasury manages collateral for group currencies:</p>
+<ul>
+<li>Handles minting (indirectly) and redemption of group Circles</li>
+<li>To mint group circles, the minter must act through the Hub contract:<ul>
+<li>either by calling <code>Hub:groupMint()</code>, upon which the Hub will structure data for the treasury to forward the collateral to the correct vault of the group</li>
+<li>or over path-based transfers, Circles can be minted into group Circles on the fly</li>
+<li>if one sends collateral directly to the Standard Treasury without data or with incorrectly structured data, the treasury will reject the transfer to avoid that funds get lost as only the hub controls minting of group tokens</li>
+<li>if one sends tokens to the treasury with the correct data structure, bypassing the hub contract, the collateral will be locked in the treasury/vault, as the hub <strong>will not mint your equivalent group Circles</strong></li>
+</ul>
+</li>
+<li>To redeem group Cirlces for the underlying collateral from the <code>Vault</code>, the owner must send the group Circles to the treasury with a correctly structured data package:<ul>
+<li>the treasury decodes the data to check whether the intent is to redeem</li>
+<li>the treasury passes the user data to the group mint policy, for it to determine the conditions of redemption (treasury is agnostic to data format for group mint policy)</li>
+<li>the treasury can execute the option of burning a portion of the collateral upon redemption</li>
+<li>the treasury can return the collateral to the redeemer -- but checks that the policy's burn amount and return amounts add up to the group currency amount  </li>
+</ul>
+</li>
+<li><code>onERC1155Received</code>: Handles single token transfers (minting or redemption)</li>
+<li><code>onERC1155BatchReceived</code>: Handles batch token transfers (minting)</li>
+<li>Acts as a factory for <code>Vaults</code>, deployed for each group to hold their collateral</li>
+<li>Creates Vaults for groups as needed</li>
+</ul>
+<p><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/treasury/StandardTreasury.sol" target="_blank" rel="noopener noreferrer">Code: /src/treasury/StandardTreasury.sol</a></p>
+<h4 id="vaults">Vaults</h4>
+<p>Vaults securely store collateral for group currencies:</p>
+<ul>
+<li>Deployed by <code>StandardTreasury</code> using a factory pattern</li>
+<li>External functions only accessible by <code>StandardTreasury</code></li>
+<li>Each group has its own <code>Vault</code> to easily query the balance of the vault address for that group</li>
+</ul>
+<p><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/treasury/StandardVault.sol" target="_blank" rel="noopener noreferrer">Code: /src/treasury/StandardVault.sol</a></p>
+<h4 id="mint-policy">Mint Policy</h4>
+<p>Groups can assign a policy contract of their chosing upon registering. Once registered the policy address is immutable, but a policy contract be written:</p>
+<ul>
+<li>for one specific group, or</li>
+<li>to be reusable for many groups to rely on,</li>
+<li>to be stateful or stateless,</li>
+<li>can be parametrized with settable parameters with some governance</li>
+<li>can be deployed as an upgradeable proxy contract</li>
+</ul>
+<p>The <code>BaseMintPolicy</code> is the simplest possible definition for a sensible group policy. It serves as a reference implementation, but developers are invited to explore and build their own policies</p>
+<p>In general a group (mint) policy must be a contract that implements the rules for minting, burning, and redeeming group currencies:</p>
+<ul>
+<li>Customizable for different group needs</li>
+<li>Default implementation (<code>BaseMintPolicy.sol</code>) allows all mints/burns and user-specified collateral for redemptions</li>
+<li><code>beforeMintPolicy</code>: Validates minting requests</li>
+<li><code>beforeBurnPolicy</code>: Validates burning requests</li>
+<li><code>beforeRedeemPolicy</code>: Specifies redemption logic</li>
+</ul>
+<p><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/groups/BaseMintPolicy.sol" target="_blank" rel="noopener noreferrer">Code: /src/groups/BaseMintPolicy.sol</a></p>
+<h4 id="system-interaction">System Interaction</h4>
+<ol>
+<li><strong>Group Creation</strong>:<ul>
+<li>User calls <code>hub.registerGroup()</code></li>
+<li>Hub assigns Standard Treasury</li>
+<li>Standard Treasury creates a Vault for the group upon first group mint</li>
+</ul>
+</li>
+<li><strong>Minting Group Circles</strong>:<ul>
+<li>Collateral transferred to Treasury</li>
+<li>Treasury forwards collateral to group's Vault</li>
+<li>Mint Policy consulted for approval</li>
+<li>Group Circles minted to user</li>
+</ul>
+</li>
+<li><strong>Redeeming Group Circles</strong>:<ul>
+<li>User sends group Circles to Treasury</li>
+<li>Treasury consults Mint Policy for redemption logic</li>
+<li>Vault returns specified collateral to user</li>
+<li>Part of collateral burned if specified by policy</li>
+</ul>
+</li>
+</ol>
+<p>This system provides a flexible framework for creating and managing group currencies within the Circles ecosystem. It allows for customizable minting and redemption policies while ensuring proper collateralization and secure storage of assets.</p>
+<h4 id="remarks">Remarks</h4>
+<ul>
+<li>Circles permits the creation of groups with custom treasury contracts. However, the community should approach such groups with caution until these foreign treasury contracts have been thoroughly vetted.</li>
+<li>Groups have the capability to trust and accept other groups as collateral. This feature enables the construction of sophisticated hierarchical group structures. However, it also introduces the possibility of cyclical collateralization. While this doesn't increase the total number of Circles in circulation, it does allow for arbitrary inflation of collateral through repeated cyclic collateralization. To mitigate this risk, groups may implement protective measures within their group mint policy.</li>
+</ul>
+<h2 id="token-representations">Token Representations</h2>
+<h3 id="circles-erc1155">Circles (ERC1155)</h3>
+<p>The core representation of Circles currencies uses the ERC1155 standard, allowing for efficient management of multiple token types (personal and group currencies) within a single contract:</p>
+<ul>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/circles/Circles.sol" target="_blank" rel="noopener noreferrer">Code: /src/circles/Circles.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/circles/ERC1155.sol" target="_blank" rel="noopener noreferrer">Code: /src/circles/ERC1155.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/circles/DiscountedBalances.sol" target="_blank" rel="noopener noreferrer">Code: /src/circles/DiscountedBalances.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/circles/Demurrage.sol" target="_blank" rel="noopener noreferrer">Code: /src/circles/Demurrage.sol</a></li>
+</ul>
+<h3 id="erc20-wrappers">ERC20 Wrappers</h3>
+<p>To enhance compatibility with existing smart contract ecosystems, Circles provides two types of ERC20 wrappers:</p>
+<ul>
+<li><strong>Demurrage ERC20</strong>: This wrapper represents Circles with demurrage applied. It results in rebalancing amounts, reflecting the daily decrease in the balances over time over all Circles.</li>
+<li><strong>Inflationary ERC20</strong>: This wrapper represents Circles in their inflationary form. Balances remain static (when not transacted), but the issuance rate for personal Circles mints increases daily. This mechanism offsets the static supply of Circles in circulation.</li>
+</ul>
+<p>For every Circles identifier (human or group Circles) either/both ERC20 contract can be deployed upon demand by calling <code>hub:wrap()</code>, and it will ensure the ERC20 contract is deployed if it doesn't already exist. ERC20 contracts can also be created explicitly before wrapping.</p>
+<p>If the ERC20 contract already exists, one can also wrap the ERC1155 Circles into ERC20 by directly sending (the correct Circles) to the relevant ERC20 contract.</p>
+<p>Both demurrage and inflationary ERC20 Circles can be converted back into demurraged ERC1155 Circles by calling <code>ECR20:unwrap()</code> as the owner of a balance on the desired ERC20 contract.</p>
+<p>Both approaches allow Circles to interact more seamlessly with standard ERC20-compatible platforms and protocols while preserving the core economic principles of the Circles system.</p>
+<p>ERC20 contracts also implement <a href="https://eips.ethereum.org/EIPS/eip-2612">ERC-2612</a>, aka <code>ERC20Permit</code>.</p>
+<ul>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/lift/DemurrageCircles.sol" target="_blank" rel="noopener noreferrer">Code: /src/lift/DemurrageCircles.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/lift/ERC20DiscountedBalances.sol" target="_blank" rel="noopener noreferrer">Code: /src/lift/ERC20DiscountedBalances.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/lift/InflationaryCircles.sol" target="_blank" rel="noopener noreferrer">Code: /src/lift/InflationaryCircles.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/lift/ERC20InflationaryBalances.sol" target="_blank" rel="noopener noreferrer">Code: /src/lift/ERC20InflationaryBalances.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/circles/BatchedDemurrage.sol" target="_blank" rel="noopener noreferrer">Code: /src/circles/BatchedDemurrage.sol</a></li>
+<li><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/circles/Demurrage.sol" target="_blank" rel="noopener noreferrer">Code: /src/circles/Demurrage.sol</a></li>
+</ul>
+<h3 id="erc20lift">ERC20Lift</h3>
+<p>The ERC20Lift contract serves as a factory-bridge between the ERC1155 and ERC20 representations, ensuring ERC20 contracts are deployed (ahead of time).</p>
+<p><a href="https://github.com/aboutcircles/circles-contracts-v2/blob/v0.3.6-docs/src/lift/ERC20Lift.sol" target="_blank" rel="noopener noreferrer">Code: /src/lift/ERC20Lift.sol</a></p>
+<h2 id="circles-v1-components-legacy">Circles v1 Components (Legacy)</h2>
+<h3 id="hub-v1">Hub v1</h3>
+<p>The original Hub contract from Circles v1. Hub v1 only has a concept of human avatars ("users") and organizations. Groups have been built on top of Hub v1. Therefore when migrating tokens from Hub v1 to Hub v2, all tokens are all associated to a human avatar (as an organization does not have its own token).</p>
+<ul>
+<li><a href="https://github.com/CirclesUBI/circles-contracts/blob/master/contracts/Hub.sol" target="_blank" rel="noopener noreferrer">Legacy Code: Circles-Contracts/contracts/Hub.sol (v1)</a></li>
+<li><a href="https://handbook.joincircles.net/" target="_blank" rel="noopener noreferrer">Legacy Documentation: Join Circles handbook (v1)</a></li>
+</ul>
+<h3 id="token">Token</h3>
+<p>The individual ERC20 token contracts for personal currencies in Circles v1 are deployed from the hub as a factory pattern upon a user (human) registering.</p>
+<p><a href="https://github.com/CirclesUBI/circles-contracts/blob/master/contracts/Token.sol" target="_blank" rel="noopener noreferrer">Legacy Code: Circles-Contracts/contracts/Token.sol (v1)</a></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Circles v2 architecture key points:</p>
+<ul>
+<li>ERC1155 implementation for improved token management</li>
+<li>Dual token representation: Demurrage and Inflationary ERC20 wrappers</li>
+<li>Native group functionality with customizable treasury and mint policies</li>
+<li>Improved settlement efficiency through batched path-transfers using flow matrix representation</li>
+<li>Backward compatibility with v1 through migration support, and reactivation of frozen accounts in v1</li>
+<li>Technical debt reduction from Hub v1</li>
+</ul>
+<p>The architecture maintains a centralized hub while allowing component-level flexibility. This design facilitates future extensions and improvements without compromising system integrity or existing functionality. The flow matrix representation for batched transfers significantly enhances the system's scalability and transaction throughput.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../introduction/" class="btn btn-neutral float-left" title="Introduction"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../advanced-topics/inflation-demurrage/" class="btn btn-neutral float-right" title="Inflation and Demurrage">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../introduction/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../advanced-topics/inflation-demurrage/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
